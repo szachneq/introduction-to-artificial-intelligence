@@ -89,8 +89,8 @@ def main() -> None:
     parser = argparse.ArgumentParser()
 
     # Add arguments
-    parser.add_argument("--x", type=float, default=-2.0, help="starting x position")
-    parser.add_argument("--y", type=float, default=2.0, help="starting y position")
+    parser.add_argument("--x", type=float, default=0.0, help="starting x position")
+    parser.add_argument("--y", type=float, default=0.0, help="starting y position")
     parser.add_argument("--rate", type=float, default=0.1, help="learning rate")
 
     # Parse the command line arguments
