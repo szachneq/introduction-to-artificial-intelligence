@@ -8,27 +8,6 @@ import matplotlib.pyplot as plt
 def function(x: float, y: float) -> float:
     return 2 * np.sin(x) + 3 * np.cos(y)
 
-
-def gradient(
-    f: Callable[[float, float], float], x: float, y: float, h=1e-5
-) -> Tuple[float, float]:
-    """Compute gradient of function f at point (x, y) using the central difference method.
-
-    Args:
-        f (Callable[[float, float], float]): the function for which we want to compute the gradient
-            to ensure reasonable results the function should be continuous function of 2 parameters
-        x (float): x position of the point
-        y (float): y position of the point
-        h (float, optional): step size used during computation. Defaults to 1e-5.
-
-    Returns:
-        Tuple[float, float]: computed gradient value
-    """
-    df_dx = (f(x + h, y) - f(x - h, y)) / (2 * h)
-    df_dy = (f(x, y + h) - f(x, y - h)) / (2 * h)
-    return (df_dx, df_dy)
-
-
 def gradient_descent(
     initial_guess: Tuple[float, float],
     learning_rate: float,
@@ -49,8 +28,13 @@ def gradient_descent(
     x, y = initial_guess
 
     for i in range(1, max_iter + 1):
-        # find the value of gradient at current position
-        grad = gradient(function, x, y)
+        # calculate partial derivatives
+        df_dx = 2 * np.cos(x)
+        df_dy = - 3 * np.sin(y)
+
+        # calculate gradient
+        grad = (df_dx, df_dy)
+
         # find next point to move to
         new_x, new_y = np.array([x, y]) - learning_rate * np.array(grad)
 
@@ -90,7 +74,7 @@ def main() -> None:
 
     # Add arguments
     parser.add_argument("--num", type=int, default=100, help="number of experiments")
-    parser.add_argument("--rate", type=float, default=0.1, help="learning rate")
+    parser.add_argument("--rate", type=float, default=0.85, help="learning rate")
 
     # Parse the command line arguments
     args = parser.parse_args()
