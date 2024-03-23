@@ -178,7 +178,7 @@ def validate_map(map: dict[str, list[str]]) -> bool:
     return True
 
 
-def csp_factory(map: dict[str, list[str]], num_colors: int) -> CSP:
+def csp_factory(map: dict[str, list[str]], num_colors: int) -> Union[CSP, None]:
     """Create the CSP object initializing it with proper values
 
     Args:
@@ -188,6 +188,9 @@ def csp_factory(map: dict[str, list[str]], num_colors: int) -> CSP:
     Returns:
         CSP: initialized CSP object
     """
+    if validate_map(map) == False:
+        return None
+    
     # names of regions
     variables = list(map.keys())
     # sets of possible solutions for each regions
@@ -246,6 +249,10 @@ def main():
     num_colors = 3
 
     csp = csp_factory(cmap, num_colors)
+    if csp is None:
+        print("Provided map is not valid")
+        return
+    
     sol = csp.solve()
 
     if sol:
