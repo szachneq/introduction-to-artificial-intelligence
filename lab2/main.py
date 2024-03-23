@@ -8,10 +8,10 @@ import matplotlib.patches as patches
 # constraint satisfaction problem
 class CSP:
     def __init__(
-        self,
-        variables: list[str],
-        domains: dict[str, set[int]],
-        constraints: dict[str, list[str]],
+            self,
+            variables: list[str],
+            domains: dict[str, set[int]],
+            constraints: dict[str, list[str]],
     ):
         """_summary_
 
@@ -37,7 +37,7 @@ class CSP:
         return self.solution
 
     def select_unassigned_variable(
-        self, assignment: dict[str, int]
+            self, assignment: dict[str, int]
     ) -> Union[str, None]:
         """Chooses the next variable (region) to assign a color to, based on the current state of the assignment
 
@@ -77,7 +77,7 @@ class CSP:
         return True
 
     def forward_checking(
-        self, var: str, value: int, assignment: dict[str, int]
+            self, var: str, value: int, assignment: dict[str, int]
     ) -> dict[str, set[int]]:
         """After assigning a color to a region, this method removes that color
         from the domains of all neighboring regions to prevent them from bein
@@ -122,14 +122,14 @@ class CSP:
         # if the solution (assignment) contains all variables then we found the solution
         if len(assignment) == len(self.variables):
             return assignment
-        
+
         # find next region to assign color to
         var = self.select_unassigned_variable(assignment)
-        
+
         # check for edge cas
         if var is None:
             return None
-        
+
         # for each possible color for the current region
         for value in self.domains.get(var, set()):
             # check if this color assignment is possible
@@ -140,17 +140,17 @@ class CSP:
                 removed_values = self.forward_checking(var, value, assignment)
                 # perform next recursive step
                 result = self.backtrack(assignment)
-                
+
                 # the solution was found in the recursive call
                 if result is not None:
                     return result
-                
+
                 # the solution was not found in the recursive call
-                del assignment[var] # revert the color assignment
+                del assignment[var]  # revert the color assignment
                 # restore domains to the state before forward checking
                 for v, vals in removed_values.items():
                     self.domains[v] |= vals
-                    
+
         # none of the color chosen fulfills the constraints - return None
         return None
 
@@ -177,7 +177,6 @@ def validate_map(map: dict[str, list[str]]) -> bool:
                 return False
     return True
 
-
 def csp_factory(map: dict[str, list[str]], num_colors: int) -> Union[CSP, None]:
     """Create the CSP object initializing it with proper values
 
@@ -188,12 +187,36 @@ def csp_factory(map: dict[str, list[str]], num_colors: int) -> Union[CSP, None]:
     Returns:
         CSP: initialized CSP object
     """
-    if validate_map(map) == False:
-        return None
-    
+    # Check if map is a dictionary
+    if not isinstance(map, dict):
+        raise ValueError("Map must be a dictionary representing adjacency constraints between regions.")
+
+    # Check if num_colors is a positive integer
+    if not isinstance(num_colors, int) or num_colors <= 0:
+        raise ValueError("Number of colors must be a positive integer.")
+
+    # Check if all keys in the map are strings
+    if not all(isinstance(region, str) for region in map.keys()):
+        raise ValueError("Keys in the map must be strings representing region names.")
+
+    # Check if all values in the map are lists of strings
+    if not all(isinstance(neighbors, list) and all(isinstance(neighbor, str) for neighbor in neighbors) for neighbors in map.values()):
+        raise ValueError("Values in the map must be lists of strings representing neighboring regions.")
+
+    # Check if all neighboring regions exist as keys in the map
+    all_regions = set(map.keys())
+    for region, neighbors in map.items():
+        for neighbor in neighbors:
+            if neighbor not in all_regions:
+                raise ValueError(f"Region '{neighbor}' listed as adjacent in the map but does not exist as a region.")
+
+            # Check if the bidirectional constraint is satisfied
+            if region not in map.get(neighbor, []) or neighbor not in map.get(region, []):
+                raise ValueError(f"Invalid adjacency constraint: '{region}' and '{neighbor}' must be mutual neighbors.")
+
     # names of regions
     variables = list(map.keys())
-    # sets of possible solutions for each regions
+    # sets of possible solutions for each region
     domains = {region: set(range(num_colors)) for region in variables}
     # relations between neighbours
     constraints = map
@@ -252,7 +275,7 @@ def main():
     if csp is None:
         print("Provided map is not valid")
         return
-    
+
     sol = csp.solve()
 
     if sol:
