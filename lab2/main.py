@@ -154,29 +154,6 @@ class CSP:
         # none of the color chosen fulfills the constraints - return None
         return None
 
-
-def validate_map(map: dict[str, list[str]]) -> bool:
-    """Check if given map contains proper data
-    The relationships should be declared both ways
-    The region cannot be adjacent to itself
-
-    Args:
-        map (dict[str, list[str]]): dict containing adjacency information
-
-    Returns:
-        bool: result whether the map is valid or not
-    """
-    # Iterate through each key and its adjacent nodes
-    for region_name, neighbors in map.items():
-        # Check if a region is listed as adjacent to itself
-        if region_name in neighbors:
-            return False
-        for neighbor in neighbors:
-            # Check if the current key is in its neighbor's adjacency list
-            if region_name not in map.get(neighbor, []):
-                return False
-    return True
-
 def csp_factory(map: dict[str, list[str]], num_colors: int) -> Union[CSP, None]:
     """Create the CSP object initializing it with proper values
 
@@ -214,6 +191,12 @@ def csp_factory(map: dict[str, list[str]], num_colors: int) -> Union[CSP, None]:
             if region not in map.get(neighbor, []) or neighbor not in map.get(region, []):
                 raise ValueError(f"Invalid adjacency constraint: '{region}' and '{neighbor}' must be mutual neighbors.")
 
+    # Iterate through each key and its adjacent nodes
+    for region_name, neighbors in map.items():
+            # Check if a region is listed as adjacent to itself
+        if region_name in neighbors:
+            raise ValueError(f"Invalid adjacency constraint: '{region_name}' has itself as a neighbor.")
+
     # names of regions
     variables = list(map.keys())
     # sets of possible solutions for each region
@@ -247,7 +230,6 @@ def plot_solution(map, solution):
     plt.axis("equal")
     plt.axis("off")
     plt.show()
-
 
 def main():
     # this dictionary shows us which nodes of the graph will be neighbours
