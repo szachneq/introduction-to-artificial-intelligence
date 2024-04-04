@@ -234,24 +234,49 @@ def plot_solution(map, solution):
 def main():
     # this dictionary shows us which nodes of the graph will be neighbours
     # each node lists its neighbours
+    # cmap = {
+    #     "zachodnio-pomorskie": ["pomorskie", "wielkopolskie", "lubuskie"],
+    #     "pomorskie": ["zachodnio-pomorskie", "wielkopolskie", "kujawsko-pomorskie", "warmińsko-mazurskie"],
+    #     "warmińsko-mazurskie": ["pomorskie", "kujawsko-pomorskie", "mazowieckie", "podlaskie"],
+    #     "podlaskie": ["warmińsko-mazurskie", "mazowieckie", "lubelskie"],
+    #     "lubuskie": ["zachodnio-pomorskie", "wielkopolskie", "dolnośląskie"],
+    #     "wielkopolskie": ["zachodnio-pomorskie", "pomorskie", "kujawsko-pomorskie", "łódzkie", "opolskie", "dolnośląskie", "lubuskie"],
+    #     "kujawsko-pomorskie": ["pomorskie", "warmińsko-mazurskie", "mazowieckie", "łódzkie", "wielkopolskie"],
+    #     "mazowieckie": ["kujawsko-pomorskie", "warmińsko-mazurskie", "podlaskie", "lubelskie", "świętokrzyskie", "łódzkie"],
+    #     "dolnośląskie": ["lubuskie", "wielkopolskie", "opolskie"],
+    #     "opolskie": ["dolnośląskie", "wielkopolskie", "łódzkie", "śląskie"],
+    #     "łódzkie": ["wielkopolskie", "kujawsko-pomorskie", "mazowieckie", "świętokrzyskie", "śląskie", "opolskie"],
+    #     "świętokrzyskie": ["łódzkie", "mazowieckie", "lubelskie", "podkarpackie", "małopolskie", "śląskie"],
+    #     "lubelskie": ["mazowieckie", "świętokrzyskie", "podkarpackie", "podlaskie"],
+    #     "śląskie": ["opolskie", "łódzkie", "świętokrzyskie", "małopolskie"],
+    #     "małopolskie": ["śląskie", "świętokrzyskie", "podkarpackie"],
+    #     "podkarpackie": ["małopolskie", "świętokrzyskie", "lubelskie"],
+    # }
+    
+    # cmap = {
+    #     "ab": ["bc", "nt", "sk"],
+    #     "bc": ["yt", "nt", "ab"],
+    #     "mb": ["sk", "nu", "on"],
+    #     "nb": ["qc", "ns", "pe"],
+    #     "ns": ["nb", "pe"],
+    #     "nl": ["qc"],
+    #     "nt": ["bc", "yt", "ab", "sk", "nu"],
+    #     "nu": ["nt", "mb"],
+    #     "on": ["mb", "qc"],
+    #     "pe": ["nb", "ns"],
+    #     "qc": ["on", "nb", "nl"],
+    #     "sk": ["ab", "mb", "nt"],
+    #     "yt": ["bc", "nt"],
+    # }
+    
     cmap = {
-        "ab": ["bc", "nt", "sk"],
-        "bc": ["yt", "nt", "ab"],
-        "mb": ["sk", "nu", "on"],
-        "nb": ["qc", "ns", "pe"],
-        "ns": ["nb", "pe"],
-        "nl": ["qc"],
-        "nt": ["bc", "yt", "ab", "sk", "nu"],
-        "nu": ["nt", "mb"],
-        "on": ["mb", "qc"],
-        "pe": ["nb", "ns"],
-        "qc": ["on", "nb", "nl"],
-        "sk": ["ab", "mb", "nt"],
-        "yt": ["bc", "nt"],
+        "A": ["B", "C"],
+        "B": ["A", "C"],
+        "C": ["A", "B"],
     }
 
     # User input for number of colors
-    num_colors = 3
+    num_colors = 4
 
     csp = csp_factory(cmap, num_colors)
     if csp is None:
