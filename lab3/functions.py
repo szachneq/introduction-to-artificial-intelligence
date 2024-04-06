@@ -80,3 +80,11 @@ init_ranges = {
     rosenbrock_2d: ((-5, 5), (-5, 5)),
     bukin_2d: ((-15, -5), (-3, 3)),
 }
+
+def global_minima():
+    x = -2.903534
+    return styblinski_tang_2d(x, x)
+
+if __name__ == "__main__":
+    x = -2.903534
+    print(styblinski_tang_2d(x, x))
