@@ -1,19 +1,20 @@
 from genetic_algorithm import GeneticAlgorithm
 from functions import global_minima
 import matplotlib.pyplot as plt
+import numpy as np
 
 if __name__ == "__main__":
     ga = GeneticAlgorithm(
         population_size=1000,
         mutation_rate=0.25,
-        mutation_strength=0.5,
+        mutation_strength=1,
         crossover_rate=0.1,
         num_generations=200,
     )
     best_solutions, best_fitness_values, average_fitness_values = ga.evolve(seed=42)
     
     GLOBAL_MINIMA = global_minima()
-    best_fitness_values_scaled = best_fitness_values - GLOBAL_MINIMA
+    best_fitness_values_scaled = np.array(best_fitness_values) - GLOBAL_MINIMA
     # best_fitness_values_scaled = []
     # for value in best_fitness_values:
     #     best_fitness_values_scaled.append(abs(value - GLOBAL_MINIMA))
