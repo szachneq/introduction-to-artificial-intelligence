@@ -11,14 +11,15 @@ def set_seed(seed):
     np.random.seed(seed)
 
 
-if __name__ == "__main__":
+def main():
     # Set seed for reproducibility
     seed = 0
     set_seed(seed)
 
-    # TODO Load and preprocess dataset
-    X, y = load_dataset(...)
-    ...
+    # Load dataset
+    X, y = load_dataset("wine")
+    # Preprocess dataset
+    X = X.drop(columns=["total_phenols"])
 
     # Split data into train and test partitions with 80% train and 20% test
     X_train, X_test, y_train, y_test = train_test_split(
@@ -42,3 +43,8 @@ if __name__ == "__main__":
 
     # TODO Evaluate the final predictions with the metric of your choice
     ...
+
+
+if __name__ == "__main__":
+    X, y = load_dataset("wine")
+    # main()
