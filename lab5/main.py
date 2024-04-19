@@ -1,11 +1,12 @@
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torchvision import transforms
 from torch.utils.data import DataLoader, random_split
 from torchvision.datasets import KMNIST
-from sklearn.metrics import confusion_matrix
+
+# for reproducibility
+torch.manual_seed(0)
 
 # Set the device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
