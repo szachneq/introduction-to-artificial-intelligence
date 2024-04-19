@@ -4,6 +4,7 @@ import torch.optim as optim
 from torchvision import transforms
 from torch.utils.data import DataLoader, random_split
 from torchvision.datasets import KMNIST
+import matplotlib.pyplot as plt
 
 # for reproducibility
 torch.manual_seed(0)
@@ -107,10 +108,20 @@ def train_epoch(loader, model, criterion, optimizer):
     return total_loss / len(loader), total_correct / len(loader.dataset)
 
 
+# Lists to store metrics
+train_losses, train_accuracies = [], []
+val_losses, val_accuracies = [], []
+
 # Training and validation loop
 for epoch in range(num_epochs):
     train_loss, train_accuracy = train_epoch(train_loader, model, criterion, optimizer)
     val_loss, val_accuracy = validate_epoch(validation_loader, model, criterion)
+
+    # Store metrics
+    train_losses.append(train_loss)
+    train_accuracies.append(train_accuracy)
+    val_losses.append(val_loss)
+    val_accuracies.append(val_accuracy)
 
     print(
         f"Epoch {epoch+1}/{num_epochs}, Train Loss: {train_loss:.4f}, Train Acc: {train_accuracy:.4f}"
@@ -120,3 +131,23 @@ for epoch in range(num_epochs):
 # For evaluation, please create plots visualizing:
 # • The loss value for every learning step,
 # • Accuracy on the training and validation set after each epoch
+
+# Plotting
+plt.figure(figsize=(12, 5))
+plt.subplot(1, 2, 1)
+plt.plot(range(1, num_epochs + 1), train_losses, label='Train Loss')
+plt.plot(range(1, num_epochs + 1), val_losses, label='Validation Loss')
+plt.title('Loss vs. Epochs')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(range(1, num_epochs + 1), train_accuracies, label='Train Accuracy')
+plt.plot(range(1, num_epochs + 1), val_accuracies, label='Validation Accuracy')
+plt.title('Accuracy vs. Epochs')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.legend()
+
+plt.show()
