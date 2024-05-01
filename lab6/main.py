@@ -32,10 +32,12 @@ def main():
     # initialize the q table
     q = np.zeros((STATE_SPACE_SIZE, ACTION_SPACE_SIZE))
 
+    episode_reward = []
     print('Training started')
     for i in range(NUM_EPISODES):
         if i % 100 == 0:
             print(f'Episode {i}')
+            episode_reward.append(0)
         state = training_env.reset()[0]
         terminated = False
         truncated = False
@@ -53,6 +55,8 @@ def main():
 
             next_state, reward, terminated, truncated, _ = training_env.step(action)
 
+            episode_reward[int(i / 100)] += reward
+
             update_q_table(
                 q,
                 state,
@@ -66,6 +70,15 @@ def main():
         EXPLORATION_RATE = max(EXPLORATION_RATE - EXPLORATION_DECAY_RATE, 0)
 
     training_env.close()
+
+    x = [ x for x in range(100, NUM_EPISODES+1, 100) ]
+
+    y = [ 0 for _ in range(len(episode_reward))]
+    for i in range(len(episode_reward)):
+        y[i] = episode_reward[i] / 100
+
+    plt.plot(x, y)
+    plt.savefig('training.png')
 
     # VISUALIZATION
     env = gym.make(
