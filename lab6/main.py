@@ -108,6 +108,13 @@ def main():
                     print("Lost")
                 sleep(1)
                 break
+
+            if truncated:
+                env.render()
+                print("Move limit reached")
+                sleep(1)
+                break
+
             state = next_state
     env.close()
 
