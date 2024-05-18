@@ -51,15 +51,6 @@ resulting_date(StartDate, N, ResultDate) :-
     N1 is N - 1,
     resulting_date(NextDate, N1, ResultDate).
 
-% Main predicate to calculate the day and date after adding working days
-n_work_days(DDMM, N, Result) :-
-    convert_ddmm_to_date(DDMM, StartDate),
-    resulting_date(StartDate, N, ResultDate),
-    convert_date_to_ddmm(ResultDate, ResultDDMM),
-    day_of_the_week(ResultDate, W),
-    day(W, DayName),
-    format(atom(Result), '~w, ~w', [DayName, ResultDDMM]).
-
 % Helper function to get the day of the week using Zeller's Congruence
 zellers_congruence(Y, M, D, DayOfWeek) :-
     (M = 1 -> Y1 is Y - 1, M1 is 13; M = 2 -> Y1 is Y - 1, M1 is 14; Y1 is Y, M1 is M),
@@ -72,6 +63,18 @@ zellers_congruence(Y, M, D, DayOfWeek) :-
 day_of_the_week(date(Y, M, D), W) :-
     zellers_congruence(Y, M, D, W).
 
+% Main predicate to calculate the day and date after adding working days
+n_work_days(DDMM, N) :-
+    convert_ddmm_to_date(DDMM, StartDate),
+    resulting_date(StartDate, N, ResultDate),
+    convert_date_to_ddmm(ResultDate, ResultDDMM),
+    day_of_the_week(ResultDate, W),
+    day(W, DayName),
+    format(atom(Result), '~w, ~w', [DayName, ResultDDMM]),
+    write(Result).
+
+
 % Example query
-% ?- n_work_days("2205", 6, Result).
-% Result = "Tuesday, 3005".
+% ?- n_work_days("2205", 6).
+% "Tuesday, 3005".
+% true
