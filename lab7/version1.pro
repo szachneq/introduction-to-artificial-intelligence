@@ -32,16 +32,30 @@ is_weekend(date(Y, M, D)) :-
 
 % Calculate the next day
 next_day(date(Y, M, D), date(Y, M, NextD)) :-
+    %If the day is less than 28, return the next day 
     D < 28, NextD is D + 1.
+% Handles the case where the date is the 28th day of a month with 31 days. (it returns 29th day)
 next_day(date(Y, M, 28), date(Y, M, 29)) :- member(M, [1, 3, 5, 7, 8, 10, 12]).
+% Handles the case where the date is the 28th day of any month except February.
+% If the month M is not February (2), the next day after the 28th is the 29th
 next_day(date(Y, M, 28), date(Y, M, 29)) :- M \= 2.
+% Handles the case where the date is the 29th day of a month with 31 days.
+% If the month M is one of January, March, May, July, August, October, or December, the next day after the 29th is the 30th.
 next_day(date(Y, M, 29), date(Y, M, 30)) :- member(M, [1, 3, 5, 7, 8, 10, 12]).
+% Handles the case where the date is the 29th day of any month except February.
+% If the month M is not February (2), the next day after the 29th is the 30th.
 next_day(date(Y, M, 29), date(Y, M, 30)) :- M \= 2.
+% Handles the transition from February 29 to March 1.
+% If the date is February 29, the next day is March 1.
 next_day(date(Y, 2, 29), date(Y, 3, 1)).
-next_day(date(Y, 2, 29), date(Y, 3, 1)).
+% Handles the case where the date is the 30th day of a month with 31 days.
+% If the month M is one of January, March, May, July, August, October, or December, the next day after the 30th is the 31st.
 next_day(date(Y, M, 30), date(Y, M, 31)) :- member(M, [1, 3, 5, 7, 8, 10, 12]).
-next_day(date(Y, M, 30), date(Y, M, 31)) :- M \= 4, M \= 6, M \= 9, M \= 11.
+% Handles the transition from the 31st day of a month to the 1st day of the next month.
+% Increments the month M by 1 to get NextM and sets the day to 1.
 next_day(date(Y, M, 31), date(Y, NextM, 1)) :- NextM is M + 1.
+% Handles the transition from December 31 to January 1 of the next year.
+% Increments the year Y by 1 to get NextY and sets the month and day to January 1.
 next_day(date(Y, 12, 31), date(NextY, 1, 1)) :- NextY is Y + 1.
 
 % Calculate the resulting date after adding working days
